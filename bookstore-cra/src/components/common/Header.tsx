@@ -2,27 +2,11 @@ import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
 import { FaSignInAlt, FaRegUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-const CATEGORY = [
-  {
-    id: null,
-    name: "전체",
-  },
-  {
-    id: 0,
-    name: "동화",
-  },
-  {
-    id: 1,
-    name: "소설",
-  },
-  {
-    id: 2,
-    name: "사회",
-  },
-];
+import { useCategory } from "../../hooks/useCategory";
 
 export const Header = () => {
+  const { category } = useCategory();
+
   return (
     <HeaderStyle>
       <h1 className="logo">
@@ -32,17 +16,13 @@ export const Header = () => {
       </h1>
       <nav className="category">
         <ul>
-          {CATEGORY.map((item) => {
+          {category.map((item: string, idx: number) => {
             return (
-              <li key={item.id}>
+              <li key={idx}>
                 <Link
-                  to={
-                    item.id === null
-                      ? `/books`
-                      : `/books?category_id=${item.id}`
-                  }
+                  to={item === "전체" ? `/books` : `/books?category=${item}`}
                 >
-                  {item.name}
+                  {item}
                 </Link>
               </li>
             );
