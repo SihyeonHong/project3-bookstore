@@ -7,7 +7,7 @@ interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size: ButtonSize;
   scheme: ButtonScheme;
   disabled?: boolean;
-  isLoading?: boolean; // 이미 버튼 눌러서 실행중이면 또 실행하지 않게
+  isloading?: boolean; // 이미 버튼 눌러서 실행중이면 또 실행하지 않게
 }
 
 export const Button = ({
@@ -15,14 +15,16 @@ export const Button = ({
   size,
   scheme,
   disabled,
-  isLoading,
+  isloading,
+  ...props
 }: Props) => {
   return (
     <ButtonStyle
       size={size}
       scheme={scheme}
       disabled={disabled}
-      isLoading={isLoading}
+      isloading={isloading}
+      {...props}
     >
       {children}
     </ButtonStyle>

@@ -4,9 +4,10 @@ import { FaSignInAlt, FaRegUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useCategory } from "../../hooks/useCategory";
 import { useAuthStore } from "../../store/authStore";
+import { Category } from "../../models/category.model";
 
 export const Header = () => {
-  const { category } = useCategory();
+  const { categories } = useCategory();
   const { isLoggedIn, storeLogout } = useAuthStore();
 
   return (
@@ -18,13 +19,17 @@ export const Header = () => {
       </h1>
       <nav className="category">
         <ul>
-          {category.map((item: string, idx: number) => {
+          {categories.map((item: Category, idx: number) => {
             return (
               <li key={idx}>
                 <Link
-                  to={item === "전체" ? `/books` : `/books?category=${item}`}
+                  to={
+                    item.name === "전체"
+                      ? `/books`
+                      : `/books?category=${item.name}`
+                  }
                 >
-                  {item}
+                  {item.name}
                 </Link>
               </li>
             );
