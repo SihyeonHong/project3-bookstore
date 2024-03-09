@@ -11,7 +11,7 @@ import { SignupProps } from "./Signup";
 
 export const ResetPassword = () => {
   const navigate = useNavigate();
-  const showAlert = useAlert();
+  const { showAlert } = useAlert();
   const [resetRequested, setResetRequested] = useState<Boolean>(false);
   const {
     register,

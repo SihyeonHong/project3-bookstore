@@ -5,5 +5,11 @@ export const useAlert = () => {
     window.alert(message);
   }, []); // useCallback: 필요할때만 이 함수가 생성되라고
 
-  return showAlert;
+  const showConfirm = useCallback((message: string, onConfirm: () => void) => {
+    if (window.confirm(message)) {
+      onConfirm();
+    }
+  }, []);
+
+  return { showAlert, showConfirm };
 };
