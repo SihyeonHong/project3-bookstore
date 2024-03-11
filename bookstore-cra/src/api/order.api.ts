@@ -1,9 +1,12 @@
 import { Order, OrderDetail, OrderSheet } from "../models/Order.model";
-import { httpClient } from "./http";
+import { httpClient, requestHandler } from "./http";
 
+// export const order = async (orderData: OrderSheet) => {
+//   const response = await httpClient.post("/orders", orderData);
+//   return response.data;
+// };
 export const order = async (orderData: OrderSheet) => {
-  const response = await httpClient.post("/orders", orderData);
-  return response.data;
+  return await requestHandler("post", "/orders", orderData);
 };
 
 export const fetchOrders = async () => {

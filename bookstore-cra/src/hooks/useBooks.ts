@@ -1,34 +1,29 @@
-import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Book } from "../models/Book.model";
-import { Pagination } from "../models/Pagination.model";
-import { fetchBooks } from "../api/books.api";
+import { FetchBooksResponse, fetchBooks } from "../api/books.api";
 import { QUERYSTRING } from "../constants/querystring";
 import { LIMIT } from "../constants/pagination";
+import { useQuery } from "@tanstack/react-query";
 
 export const useBooks = () => {
   const location = useLocation();
-  const [books, setBooks] = useState<Book[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({
-    totalCount: 0,
-    currentPage: 1,
-  });
+  const params = new URLSearchParams(location.search);
 
-  const [isEmpty, setIsEmpty] = useState<boolean>(true);
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    fetchBooks({
-      category: params.get(QUERYSTRING.CATEGORY) || undefined,
-      recent: params.get(QUERYSTRING.RECENT) ? true : undefined,
-      currentPage: Number(params.get(QUERYSTRING.CURRENT_PAGE)) || 1,
-      limit: Number(params.get(QUERYSTRING.LIMIT)) || LIMIT,
-    }).then(({ books, pagination }) => {
-      setBooks(books);
-      setPagination(pagination);
-      setIsEmpty(books.length === 0);
+  const { data: booksData, isLoading: isBooksLoading } =
+    useQuery<FetchBooksResponse>({
+      queryKey: ["books", location.search],
+      queryFn: () =>
+        fetchBooks({
+          category: params.get(QUERYSTRING.CATEGORY) || undefined,
+          recent: params.get(QUERYSTRING.RECENT) ? true : undefined,
+          currentPage: Number(params.get(QUERYSTRING.CURRENT_PAGE)) || 1,
+          limit: Number(params.get(QUERYSTRING.LIMIT)) || LIMIT,
+        }),
     });
-  }, [location.search]);
 
-  return { books, pagination, isEmpty };
+  return {
+    books: booksData?.books,
+    pagination: booksData?.pagination,
+    isEmpty: booksData?.books.length === 0,
+    isBooksLoading,
+  };
 };

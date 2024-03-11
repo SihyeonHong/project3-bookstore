@@ -15,7 +15,6 @@ export const createClient = (config?: AxiosRequestConfig) => {
     ...config,
   });
 
-  // 요청 인터셉터를 추가하여 요청을 보낼 때마다 헤더에 토큰을 설정합니다.
   axiosInstance.interceptors.request.use(
     (config) => {
       const token = getToken();
@@ -35,7 +34,6 @@ export const createClient = (config?: AxiosRequestConfig) => {
     },
     (error) => {
       if (error.response && error.response.status === 401) {
-        // 토큰 만료
         removeToken();
         window.location.href = "/login";
         return Promise.reject(error);
@@ -77,3 +75,30 @@ export const createClient = (config?: AxiosRequestConfig) => {
 }; */
 
 export const httpClient = createClient();
+
+type RequestMethod = "get" | "post" | "put" | "delete";
+
+export const requestHandler = async <T>(
+  method: RequestMethod,
+  url: string,
+  payload?: T
+) => {
+  let response;
+
+  switch (method) {
+    case "post":
+      response = await httpClient.post(url, payload);
+      break;
+    case "get":
+      response = await httpClient.get(url);
+      break;
+    case "put":
+      response = await httpClient.put(url, payload);
+      break;
+    case "delete":
+      response = await httpClient.delete(url);
+      break;
+  }
+
+  return response.data;
+};
