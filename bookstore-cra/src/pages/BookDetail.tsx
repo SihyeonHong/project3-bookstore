@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { EllipsisBox } from "../components/common/EllipsisBox";
 import { LikeButton } from "../components/book/LikeButton";
 import { AddToCart } from "../components/book/AddToCart";
+import { BookReview } from "@/components/book/BookReview";
 
 const bookInfoList = [
   {
@@ -44,7 +45,7 @@ const bookInfoList = [
 
 export const BookDetail = () => {
   const { isbn } = useParams();
-  const { book, likeToggle } = useBook(isbn);
+  const { book, likeToggle, reviews, addReview } = useBook(isbn);
 
   if (!book) return null;
 
@@ -80,6 +81,8 @@ export const BookDetail = () => {
         <EllipsisBox linelimit={5}>{book.detail}</EllipsisBox>
         <Title size="medium">목차</Title>
         <p className="index">{book.contents}</p>
+        <Title size="medium">리뷰</Title>
+        <BookReview reviews={reviews} onAdd={addReview} />
       </div>
     </BookDetailStyle>
   );

@@ -17,3 +17,13 @@ export interface Book {
 export interface BookDetail extends Book {
   liked: boolean;
 }
+
+export interface BookReviewItem {
+  isbn: string;
+  userName: string;
+  content: string;
+  createdAt: string;
+  score: number;
+}
+
+export type BookReviewItemWrite = Pick<BookReviewItem, "content" | "score">;
